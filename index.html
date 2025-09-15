@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,23 +6,17 @@
   <title>Intel Timeline Eco-Tech</title>
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #222; }
-    header {
-      background: linear-gradient(90deg, #0071C5 0%, #4CAF50 100%);
-      color: #fff;
-      padding: 1rem 2rem;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,113,197,0.10);
-    }
+    header { background: #0071C5; color: #fff; padding: 1rem 2rem; text-align: center; }
     .header-title { margin: 0; font-size: 2rem; font-weight: bold; text-align: center; }
     nav { margin-top: 0.5rem; }
-    nav a { color: #fff; margin: 0 1rem; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    nav a { color: #fff; margn: 0 1rem; text-decoration: none; font-weight: 500; transition: color 0.2s; }
     nav a:hover, nav a:focus { text-decoration: underline; color: #4CAF50; }
     .hero { background: linear-gradient(135deg, #0071C5 50%, #4CAF50 50%); color: #FFFFFF; text-align: center; padding: 4rem 2rem; }
     .content { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; padding: 3rem 2rem; background-color: #E0E0E0; }
     .show-card-btn { 
       display: inline-block; 
       background-color: #0071C5; 
-      color: #fff; 
+      color: #fff;
       padding: 0.75rem 1.5rem; 
       border-radius: 8px; 
       font-weight: bold; 
@@ -37,11 +30,17 @@
     }
     .show-card-btn:hover, .show-card-btn:focus, .show-card-btn.active-link {
       background-color: #004e91; 
-      text-decoration: underline; 
+      text-decoration: underline;
+    }
+    /* Underline on mobile, iPad, nesthub */
+    @media (max-width: 1200px), (max-width: 1300px) and (max-height: 700px) {
+      .show-card-btn.active-link {
+        text-decoration: underline !important;
+      }
     }
     .timeline-section { padding: 3rem 2rem; background: #F5F5F5; width: 100%; position:relative; min-height: 90vh !important; overflow: visible !important; }
     .timeline-title { color: #0071C5; font-size: 2rem; margin-bottom: 2rem; text-align: center; }
-    /* Default vertical timeline */
+    /* --- everything else unchanged --- */
     .timeline-horizontal { display: none !important; }
     .timeline-bar { display: none !important; }
     .timeline-vertical {
@@ -160,6 +159,7 @@
       word-break: break-word;
       flex: 1 1 0%;
     }
+
     /* Tablet/iPad vertical scroll expanded, reduced card width */
     @media (min-width: 768px) and (max-width: 1200px) {
       .timeline-section,
@@ -194,7 +194,8 @@
       }
       .card-text { font-size: 1.13em !important; }
     }
-    /* --- NEST HUB HORIZONTAL TIMELINE OVERRIDE --- */
+
+    /* Nest Hub 1280x600: horizontal timeline, bar and cards fit, vertical hidden */
     @media (min-width: 1200px) and (max-width: 1300px) and (max-height: 700px) {
       .timeline-horizontal {
         display: flex !important;
@@ -205,10 +206,11 @@
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
+        padding-bottom: 100px;
+        min-height: 290px;
         box-sizing: content-box;
         gap: 0;
-        overflow-x: hidden !important; /* disables horizontal scroll */
-        padding-bottom: 100px;
+        overflow-x: visible;
       }
       .timeline-bar {
         display: block !important;
@@ -241,9 +243,7 @@
       .timeline-event-horizontal[data-index="4"] { left: 590px; }
       .timeline-event-horizontal[data-index="5"] { left: 720px; }
       .timeline-event-horizontal[data-index="6"] { left: 850px; }
-      .timeline-event-horizontal[data-index="7"] {
-        left: 980px;
-      }
+      .timeline-event-horizontal[data-index="7"] { left: 1040px; }
       .timeline-dot-horizontal {
         position: absolute;
         top: 66px;
@@ -328,20 +328,19 @@
         transition: box-shadow 0.2s;
       }
       .timeline-event-horizontal:last-child .timeline-card {
-        left: calc(100% - 340px) !important;
-        right: auto !important;
+        left: auto !important;
+        right: 32px !important;
         transform: none !important;
-        margin-right: 32px !important;
-        /* boundary between card and screen edge */
-        box-shadow: 0 0 0 6px #F5F5F5 !important;
+        box-shadow: 0 0 0 8px #F5F5F5 !important;
       }
       .timeline-event-horizontal:last-child {
-        /* add right margin boundary for 2023 card */
+        right: 0 !important;
         margin-right: 32px !important;
       }
       .timeline-year-list { display: none !important; }
       .timeline-vertical { display: none !important; }
     }
+
     /* Desktop Pro & Nest Hub Pro: horizontal timeline, bring cards slightly forward */
     @media (min-width: 1301px) {
       .timeline-horizontal {
@@ -370,7 +369,6 @@
         border-radius: 2px;
         z-index: 0;
       }
-      /* Move all cards back by 40px so the 2023 card is visible */
       .timeline-event-horizontal[data-index="0"] { left: 80px; }
       .timeline-event-horizontal[data-index="1"] { left: 180px; }
       .timeline-event-horizontal[data-index="2"] { left: 300px; }
@@ -378,24 +376,20 @@
       .timeline-event-horizontal[data-index="4"] { left: 540px; }
       .timeline-event-horizontal[data-index="5"] { left: 660px; }
       .timeline-event-horizontal[data-index="6"] { left: 780px; }
-      .timeline-event-horizontal[data-index="7"] {
-        left: 900px;
-        margin-right: 32px !important;
-      }
+      .timeline-event-horizontal[data-index="7"] { left: 1040px; }
       .timeline-event-horizontal:last-child .timeline-card {
-        left: calc(100% - 340px) !important;
-        right: auto !important;
+        left: auto !important;
+        right: 32px !important;
         transform: none !important;
-        margin-right: 32px !important;
-        /* boundary between card and screen edge */
-        box-shadow: 0 0 0 6px #F5F5F5 !important;
+        box-shadow: 0 0 0 8px #F5F5F5 !important;
       }
       .timeline-event-horizontal:last-child {
+        right: 0 !important;
         margin-right: 32px !important;
       }
       .timeline-vertical { display: none !important; }
     }
-    /* MOBILE vertical scroll expanded, reduced card width */
+
     @media (max-width: 767px) {
       .timeline-section { padding: 1rem 0.2rem; }
       .timeline-vertical {
@@ -431,6 +425,19 @@
       overflow-x: hidden !important;
       max-width: 100vw !important;
     }
+
+    /* Footer Color Scheme */
+    footer {
+      background: linear-gradient(90deg, #0071C5 0%, #4CAF50 100%);
+      color: #fff;
+      text-align: center;
+      padding: 1.2rem 0 1.2rem 0;
+      font-size: 1.08rem;
+      letter-spacing: 0.03em;
+      box-shadow: 0 -2px 10px rgba(0,113,197,0.10);
+      margin-top: 0;
+      border-top: 2px solid #0071C5;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -441,6 +448,7 @@
           btn.classList.add('active-link');
         });
       });
+
       function activateDesktopTimeline() {
         const events = document.querySelectorAll('.timeline-event-horizontal');
         events.forEach(ev => {
