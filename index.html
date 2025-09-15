@@ -1,336 +1,661 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Intel Timeline</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Intel Timeline Eco-Tech</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      background: #f8fafc;
-      color: #222;
-    }
-    .wrap {
-      max-width: 1150px;
-      margin: 0 auto;
-      padding: 10px;
-    }
-    .intel-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    .intel-header img {
-      height: 44px;
-    }
-    h1 {
-      margin-bottom: 5px;
-      text-align: center;
-      color: #222;
-      font-weight: 700;
-      font-size: 1.3rem;
-    }
-    .timeline-horizontal {
-      position: relative;
-      margin: 30px auto;
-      height: 440px;
-      background: transparent;
-      max-width: 1000px; /* Wider timeline for computers */
-      width: 100%;
-    }
-    .timeline-axis {
-      position: absolute;
-      top: 180px;
-      left: 5vw;
-      right: 5vw;
-      height: 8px;
-      background: linear-gradient(90deg, #f87171 0%, #fbbf24 25%, #34d399 45%, #38bdf8 75%, #a78bfa 100%);
-      border-radius: 4px;
-      z-index: 0;
-      box-shadow: 0 2px 10px #0002;
-    }
-    /* Timeline node: small circle for beginners */
-    .timeline-node {
-      position: absolute;
-      top: 155px;
-      left: 0;
-      width: 32px; /* Small circle */
-      height: 32px;
-      border-radius: 50%; /* Makes it a circle */
-      border: 2px solid #fff;
-      box-shadow: 0 2px 10px 0 rgba(56,189,248,0.13);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      z-index: 2;
-      background: #6cc4ff;
-      padding: 0;
-      transition: width 0.4s, height 0.4s, box-shadow 0.4s, border-color 0.4s; /* Smooth grow effect */
-    }
-    /* Make each node a different color for fun */
-    .timeline-node[data-index="0"] { left: 5%; background: #f87171; }
-    .timeline-node[data-index="1"] { left: 28%; background: #fbbf24; }
-    .timeline-node[data-index="2"] { left: 51%; background: #34d399; }
-    .timeline-node[data-index="3"] { left: 74%; background: #38bdf8; }
-    /* Grow the circle gradually on hover/focus */
-    .timeline-node:hover, .timeline-node:focus {
-      width: 52px;
-      height: 52px;
-      box-shadow: 0 0 0 10px #38bdf880;
-      border-color: #38bdf8;
-      z-index: 3;
-    }
-    .timeline-node.active {
-      width: 52px;
-      height: 52px;
-      box-shadow: 0 0 0 14px #6cc4ff50;
-      border-color: #6cc4ff;
-      z-index: 3;
-    }
-    /* Hide the image inside the circle for now, just show the circle */
-    .timeline-node img {
-      display: none;
-    }
-    .timeline-node-year {
-      font-weight: 600;
-      font-size: 14px;
-      color: #fff;
-      background: rgba(0,0,0,0.10);
-      border-radius: 7px;
-      padding: 1px 6px;
-      margin-top: 4px;
-      margin-bottom: 0;
-      border: none;
-      box-shadow: none;
-      display: block;
-    }
-    /* Timeline card styles for desktop and large screens */
-    .timeline-card {
-      position: absolute;
-      width: 180px;
+      font-family: Arial, sans-serif;
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px 0 #0ea5e944;
+      color: #222;
+    }
+    header {
+      background: #0071C5;
+      color: #fff;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    .header-title {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    nav {
+      margin-top: 0.5rem;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav a:hover, nav a:focus {
+      text-decoration: underline;
+      color: #4CAF50;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0071C5 50%, #4CAF50 50%);
+      color: #FFFFFF;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .content {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px 10px 8px 10px;
-      z-index: 5;
-      opacity: 0; /* Hide cards by default */
-      pointer-events: none;
-      transition: opacity .25s;
-      font-size: 14px;
-      left: unset;
-      transform: unset;
-      max-width: unset;
-      word-break: normal;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 3rem 2rem;
+      background-color: #E0E0E0;
     }
-    .timeline-card.visible {
-      opacity: 1; /* Show card when active */
-      pointer-events: auto;
+    .show-card-btn {
+      display: inline-block;
+      background-color: #0071C5;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 0.5rem 1rem 0.5rem 1rem;
+      font-size: 1.1rem;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      transition: background 0.2s;
     }
-    .timeline-card img {
-      width: 80px;
-      margin-bottom: 8px;
+    .show-card-btn:hover, .show-card-btn:focus {
+      background-color: #004e91;
+      text-decoration: underline;
     }
-    .timeline-card h3 {
-      font-size: 1rem;
+    .timeline-section { 
+      padding: 3rem 2rem; 
+      background: #F5F5F5; 
+      width: 100%;
+      position:relative;
+      overflow-x: hidden !important;
     }
-    .timeline-card p {
-      font-size: 14px;
-    }
-    /* Mobile first: stack timeline vertically for small screens */
-    @media (max-width: 650px) {
-      /* Make the timeline axis vertical */
+    .timeline-title { color: #0071C5; font-size: 2rem; margin-bottom: 2rem; text-align: center; }
+
+    /* DESKTOP */
+    @media (min-width: 901px) {
       .timeline-horizontal {
-        height: 700px; /* Set enough height for vertical timeline */
-        max-width: 98vw;
-        margin: 10px auto;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
         position: relative;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-bottom: 100px;
+        min-height: 290px;
+        box-sizing: content-box;
+        gap: 0;
+        overflow-x: hidden;
       }
-      .timeline-axis {
-        top: 60px;
-        left: 50%; /* Center the axis */
-        transform: translateX(-50%);
-        width: 10px;
-        height: 550px;
-        right: auto;
-        background: linear-gradient(180deg, #f87171 0%, #fbbf24 25%, #34d399 45%, #38bdf8 75%, #a78bfa 100%);
-        border-radius: 7px;
-      }
-      /* Alternate nodes left and right of the axis */
-      .timeline-node {
-        width: 38px;
-        height: 38px;
-      }
-      .timeline-node[data-index="0"] { left: calc(50% - 55px); top: 70px; } /* Left side */
-      .timeline-node[data-index="1"] { left: calc(50% + 17px); top: 200px; } /* Right side */
-      .timeline-node[data-index="2"] { left: calc(50% - 55px); top: 340px; } /* Left side */
-      .timeline-node[data-index="3"] { left: calc(50% + 17px); top: 480px; } /* Right side */
-      /* Mobile-only notecard styles with custom widths for each plot point */
-      .timeline-card {
-        padding: 6px 2px 6px 2px;
-        font-size: 11px;
-        word-break: break-word;
+      .timeline-bar {
         position: absolute;
-        left: unset;
-        right: unset;
-        transform: unset;
+        top: 72px;
+        left: 80px;
+        width: calc(100% - 160px);
+        height: 4px;
+        background: linear-gradient(90deg, #0071C5, #4CAF50);
+        border-radius: 2px;
+        z-index: 0;
       }
-      /* 1968: wider and shorter card, can cross boundary but not cover other points */
-      .timeline-card[data-index="0"] {
-        left: 0;
-        top: 40px;
-        width: 180px;
-        max-width: 180px;
-        padding: 2px 2px 2px 2px;
-        font-size: 9px;
+      .timeline-event-horizontal {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 290px;
+        z-index: 2;
+        outline: none;
+        background: none;
+        width: 120px;
+        max-width: 120px;
+        text-align: center;
       }
-      /* 1971: wider and shorter card, can cross boundary but not cover other points */
-      .timeline-card[data-index="1"] {
+      .timeline-event-horizontal[data-index="0"] { left: 120px; }
+      .timeline-event-horizontal[data-index="1"] { left: 200px; }
+      .timeline-event-horizontal[data-index="2"] { left: 320px; }
+      .timeline-event-horizontal[data-index="3"] { left: 440px; }
+      .timeline-event-horizontal[data-index="4"] { left: 560px; }
+      .timeline-event-horizontal[data-index="5"] { left: 680px; }
+      .timeline-event-horizontal[data-index="6"] { left: 800px; }
+      .timeline-event-horizontal[data-index="7"] { left: 920px; }
+      @media (max-width: 1200px) {
+        .timeline-event-horizontal[data-index="0"] { left: 13vw; }
+        .timeline-event-horizontal[data-index="1"] { left: 16vw; }
+        .timeline-event-horizontal[data-index="2"] { left: 26vw; }
+        .timeline-event-horizontal[data-index="3"] { left: 36vw; }
+        .timeline-event-horizontal[data-index="4"] { left: 46vw; }
+        .timeline-event-horizontal[data-index="5"] { left: 56vw; }
+        .timeline-event-horizontal[data-index="6"] { left: 66vw; }
+        .timeline-event-horizontal[data-index="7"] { left: 76vw; }
+      }
+      .timeline-dot-horizontal {
+        position: absolute;
+        top: 66px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 18px;
+        height: 18px;
+        background: #4CAF50;
+        border: 3px solid #0071C5;
+        border-radius: 50%;
+        z-index: 2;
+        cursor: pointer;
+        box-sizing: border-box;
+        transition: border 0.2s;
+      }
+      .timeline-event-horizontal.active .timeline-dot-horizontal {
+        border-color: #4CAF50;
+        background: #0071C5;
+      }
+      .timeline-date-horizontal {
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-weight: bold;
+        color: #0071C5;
+        background: rgba(255,255,255,0.85);
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-size: 1rem;
+        z-index: 3;
+        min-width: 48px;
+        text-align: center;
+        pointer-events: none;
+      }
+      .timeline-card {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 110px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #F5F5F5;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+        width: 320px;
+        min-width: 220px;
+        max-width: 320px;
+        min-height: 180px;
+        max-height: 360px;
+        padding: 1rem 1rem;
+        z-index: 1000;
+        text-align: left;
+        transition: opacity 180ms ease, transform 180ms ease;
+        box-sizing: border-box;
+        border: 2px solid #F5F5F5;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 18px;
+        overflow: visible;
+        margin-bottom: 1rem;
+      }
+      .timeline-event-horizontal.active .timeline-card {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+      }
+      .timeline-card img,
+      .timeline-card img.long-img {
+        width: 140px !important;
+        height: 140px !important;
+        max-width: 140px !important;
+        max-height: 140px !important;
+        object-fit: cover !important;
+        border-radius: 8px !important;
+        margin: 0 !important;
+        background: none !important;
+        display: block !important;
+        flex-shrink: 0 !important;
+      }
+      .timeline-event-horizontal:last-child .timeline-card {
+        left: 60%;
         right: 0;
-        left: auto;
-        top: 170px;
-        width: 180px;
-        max-width: 180px;
-        padding: 2px 2px 2px 2px;
-        font-size: 9px;
+        transform: translateX(-50%);
       }
-      /* 1978: more space, medium card */
-      .timeline-card[data-index="2"] {
-        left: 0;
-        top: 310px;
-        width: 180px;
-        max-width: 180px;
-        padding: 6px 2px 6px 2px;
-        font-size: 11px;
-      }
-      /* 1985: most space, widest card */
-      .timeline-card[data-index="3"] {
-        right: 0;
-        left: auto;
-        top: 450px;
-        width: 220px;
-        max-width: 220px;
-        padding: 6px 2px 6px 2px;
-        font-size: 11px;
-      }
-      .timeline-card img {
-        width: 40px;
-        margin-bottom: 4px;
-      }
-      .timeline-card h3 {
-        font-size: 0.95rem;
-      }
-      .timeline-card p {
-        font-size: 11px;
-      }
-      h1 { font-size: 1.05rem; }
+      .timeline-year-list { display: none !important; }
+      .timeline-vertical { display: none !important; }
     }
-    /* ...existing code... */
+
+    /* MOBILE/TABLET VERTICAL TIMELINE */
+    @media (max-width: 900px) {
+      html, body {
+        overflow-x: hidden !important;
+      }
+      .timeline-horizontal { display: none !important; }
+      .timeline-bar { display: none !important; }
+      .timeline-vertical {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100vw;
+        max-width: 100vw;
+        margin: 0 auto;
+        min-height: 0;
+        padding-bottom: 0;
+        overflow-x: hidden !important;
+      }
+      .timeline-vertical::before {
+        content: "";
+        position: absolute;
+        left: 40px;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(180deg, #0071C5, #4CAF50);
+        border-radius: 2px;
+        z-index: 0;
+      }
+      .timeline-event-vertical {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        position: relative;
+        width: 100%;
+        background: none;
+        margin-bottom: 1.2rem; /* Reduce spacing between points */
+        z-index: 2;
+        cursor:pointer;
+        min-height: 0;
+      }
+      .timeline-dot-vertical {
+        width: 24px;
+        height: 24px;
+        background: #4CAF50;
+        border: 3px solid #0071C5;
+        border-radius: 50%;
+        margin-top: 0.6rem;
+        margin-left: 30px;
+        margin-right: 14px;
+        box-sizing: border-box;
+        z-index: 3;
+        flex-shrink: 0;
+      }
+      .timeline-date-vertical {
+        font-weight: bold;
+        color: #0071C5;
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        background: none;
+        padding: 0;
+        min-width: unset;
+        z-index: 1;
+        margin-top: 0.5rem;
+      }
+      .timeline-card {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        position: static !important;
+        left: unset !important;
+        top: unset !important;
+        transform: none !important;
+        width: 88vw !important;
+        max-width: 430px !important;
+        min-width: 0 !important;
+        margin: 8px auto 10px auto !important; /* Reduce bottom margin */
+        box-sizing: border-box;
+        text-align: left;
+        z-index: 100 !important;
+        background: #F5F5F5 !important;
+        border: 2px solid #F5F5F5 !important;
+        border-radius: 16px !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 18px !important;
+        padding: 1rem 1rem !important;
+        min-height: 180px !important;
+      }
+      .timeline-card img,
+      .timeline-card img.long-img {
+        width: 140px !important;
+        height: 140px !important;
+        max-width: 140px !important;
+        max-height: 140px !important;
+        object-fit: cover !important;
+        margin: 8px 0 !important;
+        background: #F5F5F5 !important;
+        border-radius: 8px !important;
+        display: block;
+        flex-shrink: 0;
+      }
+      .timeline-event-vertical.active .timeline-card {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+      .timeline-year-list { display: none !important; }
+      .card-text {
+        font-size: 1.05em;
+        word-break: break-word;
+        flex: 1 1 0%;
+      }
+    }
+    @media (max-width: 700px) {
+      .timeline-section { padding: 2rem 0.5rem; }
+      .timeline-card {
+        max-width: 98vw !important;
+        width: 100% !important;
+        padding: 1rem 0.3rem !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        min-height: 160px !important;
+      }
+      .timeline-card img, .timeline-card img.long-img {
+        width: 120px !important;
+        height: 120px !important;
+        max-width: 120px !important;
+        max-height: 120px !important;
+        object-fit: cover !important;
+      }
+      .timeline-card .card-text {
+        font-size: 0.95em;
+      }
+    }
+    footer { background: #0071C5; color: #fff; text-align: center; padding: 1rem; margin-top: 2rem; }
   </style>
-</head>
-<body>
-  <div class="wrap">
-    <div class="intel-header">
-      <!-- Heading photo for the timeline -->
-      <img src="images/intel-header-logo.svg" alt="Timeline Heading Photo" style="height: 60px; border-radius: 10px; box-shadow: 0 2px 8px #0002;">
-    </div>
-    <h1>Intel Timeline</h1>
-    <!-- Timeline container with reduced width for desktop -->
-    <section class="timeline-horizontal" aria-label="Intel timeline" style="max-width:800px; margin:30px auto;">
-      <!-- Use an ordered list for semantic timeline structure -->
-      <ol class="timeline-axis" role="list" aria-label="Intel historical milestones">
-        <!-- Timeline nodes: Only 4 photos -->
-        <!-- Photo 1: Intel founding 1968 -->
-        <li>
-          <button class="timeline-node" data-index="0" aria-label="Photo 1" tabindex="0">
-            <span class="timeline-node-year">1968</span>
-          </button>
-        </li>
-        <!-- Photo 2: Early microprocessor -->
-        <li>
-          <button class="timeline-node" data-index="1" aria-label="Photo 2" tabindex="0">
-            <span class="timeline-node-year">1971</span>
-          </button>
-        </li>
-        <!-- Photo 3: Intel 8086 -->
-        <li>
-          <button class="timeline-node" data-index="2" aria-label="Photo 3" tabindex="0">
-            <span class="timeline-node-year">1978</span>
-          </button>
-        </li>
-        <!-- Photo 4: Intel 1985 processor -->
-        <li>
-          <button class="timeline-node" data-index="3" aria-label="Photo 4" tabindex="0">
-            <span class="timeline-node-year">1985</span>
-          </button>
-        </li>
-      </ol>
-      <!-- Timeline cards for each photo -->
-      <div class="timeline-card" data-index="0" id="card-0">
-        <img src="images/4.jpg" alt="Intel founding 1968">
-        <h3>1968 — Intel Founded</h3>
-        <p>Intel was founded in 1968, marking the beginning of the modern semiconductor industry.</p>
-      </div>
-      <div class="timeline-card" data-index="1" id="card-1">
-        <img src="images/3.jpg" alt="Early Microprocessor">
-        <h3>1971 — First Microprocessor</h3>
-        <p>Intel introduced the world’s first commercial microprocessor, revolutionizing computing.</p>
-      </div>
-      <div class="timeline-card" data-index="2" id="card-2">
-        <img src="images/2.jpg" alt="Intel 8086">
-        <h3>1978 — Intel 8086</h3>
-        <p>The Intel 8086 microprocessor launched, laying the foundation for the x86 architecture.</p>
-      </div>
-      <div class="timeline-card" data-index="3" id="card-3">
-        <img src="images/1.jpg" alt="Intel 1985 Processor">
-        <h3>1985 — Intel Innovation</h3>
-        <p>Intel continued to push forward with powerful processors, shaping the future of PCs.</p>
-      </div>
-    </section>
-  </div>
   <script>
-    // Beginner-friendly script to show notecard when hovering over a node
-    const nodes = document.querySelectorAll('.timeline-node');
-    const cards = document.querySelectorAll('.timeline-card');
-
-    function showCard(index) {
-      cards.forEach((card, i) => {
-        if (i === index) {
-          card.classList.add('visible');
-          nodes[i].classList.add('active');
-        } else {
-          card.classList.remove('visible');
-          nodes[i].classList.remove('active');
+    function activateDesktopTimeline() {
+      const events = document.querySelectorAll('.timeline-event-horizontal');
+      events.forEach(ev => {
+        ev.addEventListener('mouseenter', function() {
+          events.forEach(e => e.classList.remove('active'));
+          this.classList.add('active');
+        });
+        ev.addEventListener('click', function() {
+          events.forEach(e => e.classList.remove('active'));
+          this.classList.add('active');
+        });
+        ev.addEventListener('focus', function() {
+          events.forEach(e => e.classList.remove('active'));
+          this.classList.add('active');
+        });
+        ev.addEventListener('keypress', function(e) {
+          if(e.key === 'Enter' || e.key === ' ') {
+            events.forEach(e => e.classList.remove('active'));
+            this.classList.add('active');
+          }
+        });
+      });
+      document.addEventListener('click', function(e) {
+        if(!e.target.closest('.timeline-event-horizontal')) {
+          events.forEach(e => e.classList.remove('active'));
         }
       });
+      if (events.length > 0) {
+        events[0].classList.add('active');
+      }
     }
-
-    // Show card on hover/focus/click/touch
-    nodes.forEach((node, i) => {
-      node.addEventListener('mouseenter', () => showCard(i));
-      node.addEventListener('focus', () => showCard(i));
-      node.addEventListener('click', () => showCard(i));
-      node.addEventListener('touchstart', () => showCard(i));
-      node.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          showCard(i);
+    function activateMobileTimeline() {
+      const events = document.querySelectorAll('.timeline-event-vertical');
+      events.forEach(ev => {
+        ev.addEventListener('click', function() {
+          events.forEach(e => e.classList.remove('active'));
+          this.classList.add('active');
+        });
+        ev.addEventListener('keypress', function(e) {
+          if(e.key === 'Enter' || e.key === ' ') {
+            events.forEach(e => e.classList.remove('active'));
+            this.classList.add('active');
+          }
+        });
+      });
+      document.addEventListener('click', function(e) {
+        if(!e.target.closest('.timeline-event-vertical')) {
+          events.forEach(e => e.classList.remove('active'));
         }
       });
-    });
-
-    // Hide card when mouse leaves timeline area (for desktop)
-    document.querySelector('.timeline-horizontal').addEventListener('mouseleave', () => {
-      cards.forEach(card => card.classList.remove('visible'));
-      nodes.forEach(node => node.classList.remove('active'));
+      if (events.length > 0) {
+        events[0].classList.add('active');
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      function setupTimeline() {
+        if(window.innerWidth > 900) {
+          activateDesktopTimeline();
+        } else {
+          activateMobileTimeline();
+        }
+      }
+      setupTimeline();
+      window.addEventListener('resize', function() {
+        setupTimeline();
+      });
     });
   </script>
+</head>
+<body>
+  <header>
+    <h1 class="header-title">Intel Sustainability</h1>
+    <nav>
+      <a href="https://www.intel.com/" target="_blank" rel="noopener">Home</a>
+      <a href="https://www.intel.com/content/www/us/en/corporate-responsibility/corporate-responsibility.html" target="_blank" rel="noopener">Goals</a>
+      <a href="https://www.intel.com/content/www/us/en/company-overview/company-overview.html" target="_blank" rel="noopener">Innovation</a>
+      <a href="https://www.intel.com/content/www/us/en/corporate-responsibility/community-involvement.html" target="_blank" rel="noopener">Contact</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h2>Driving a Sustainable Future</h2>
+    <p>Intel is committed to innovation that protects our planet.</p>
+  </section>
+  <section class="content">
+    <a class="show-card-btn" href="https://www.intel.com/content/www/us/en/corporate-responsibility/corporate-responsibility.html" target="_blank" rel="noopener">Clean Energy</a>
+    <a class="show-card-btn" href="https://www.intel.com/content/www/us/en/company-overview/company-overview.html" target="_blank" rel="noopener">Green Products</a>
+    <a class="show-card-btn" href="https://www.intel.com/content/www/us/en/corporate-responsibility/community-involvement.html" target="_blank" rel="noopener">Intel in the Community</a>
+  </section>
+  <section class="timeline-section">
+    <div class="timeline-title">Intel Eco-Tech Timeline</div>
+    <div class="timeline-horizontal">
+      <div class="timeline-bar"></div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="1968" data-index="0">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">1968</div>
+        <div class="timeline-card">
+          <img class="timeline-img" src="https://media-af-photos.ancientfaces.com/313/1318313/1318313-original.gif" alt="Intel Science Fair 1968">
+          <div class="card-text">
+            <strong>1968</strong><br>
+            Intel is founded, supporting innovation and technology education.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="1971" data-index="1">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">1971</div>
+        <div class="timeline-card">
+          <img class="timeline-img img-1971" src="https://hackaday.com/wp-content/uploads/2018/01/intel_c4004_b.jpg?w=800" alt="Intel 4004 Microprocessor 1971">
+          <div class="card-text">
+            <strong>1971</strong><br>
+            Intel introduces the first microprocessor, the 4004.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="1978" data-index="2">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">1978</div>
+        <div class="timeline-card">
+          <img class="timeline-img img-1978" src="https://i.extremetech.com/imagery/content-types/01Sv9zAVXuL7BmMnZI3g3CT/hero-image.jpg" alt="Intel 8086 Processor 1978">
+          <div class="card-text">
+            <strong>1978</strong><br>
+            Introduction of the 8086 processor, leading the way for personal computing.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="1985" data-index="3">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">1985</div>
+        <div class="timeline-card">
+          <img class="timeline-img img-1985" src="https://cdn.cpu-world.com/CPUs/80386/L_Intel-NG80386SX-25%20(SAMPLE).jpg" alt="Intel 80386 Processor 1985">
+          <div class="card-text">
+            <strong>1985</strong><br>
+            Intel launches the 80386 processor, delivering improved energy efficiency.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="2006" data-index="4">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">2006</div>
+        <div class="timeline-card">
+          <img class="timeline-img" src="https://mms.businesswire.com/media/20240124070327/en/2007663/4/Intel-New-Mexico-Fabs-1.jpg" alt="Intel Fabs 2006">
+          <div class="card-text">
+            <strong>2006</strong><br>
+            Intel's greenhouse gas emissions reached their peak in 2006.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="2020" data-index="5">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">2020</div>
+        <div class="timeline-card">
+          <img class="timeline-img" src="https://d1io3yog0oux5.cloudfront.net/_d695306582e6f1104214b69298ca5ad9/intel/news/155/1497/image.jpeg" alt="Intel Sustainability 2020">
+          <div class="card-text">
+            <strong>2020</strong><br>
+            Intel achieves 100% renewable energy usage in U.S. operations.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="2022" data-index="6">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">2022</div>
+        <div class="timeline-card">
+          <img class="timeline-img long-img" src="https://tse3.mm.bing.net/th/id/OIP.4fhGa4057rk5u4ElYKciFAHaE7?pid=Api&P=0&h=220" alt="Intel Sustainability 2022">
+          <div class="card-text">
+            <strong>2022</strong><br>
+            Intel employees celebrate Earth Day, supporting global sustainability efforts.
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-horizontal" tabindex="0" aria-label="2023" data-index="7">
+        <div class="timeline-dot-horizontal"></div>
+        <div class="timeline-date-horizontal">2023</div>
+        <div class="timeline-card">
+          <img class="timeline-img" style="object-fit:cover;" src="https://tse3.mm.bing.net/th/id/OIP.0lb-4bSPZbaAuxvoEjeu9wHaEK?pid=Api&P=0&h=220" alt="Intel Sustainability 2023">
+          <div class="card-text">
+            <strong>2023</strong><br>
+            Intel's Fab 34 plant achieves less than 1% waste, with robust recycling and diversion efforts.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-vertical">
+      <div class="timeline-event-vertical" tabindex="0" aria-label="1968" data-label="1968">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">1968</div>
+          <div class="timeline-card">
+            <img class="timeline-img" src="https://media-af-photos.ancientfaces.com/313/1318313/1318313-original.gif" alt="Intel Science Fair 1968">
+            <div class="card-text">
+              <strong>1968</strong><br>
+              Intel is founded, supporting innovation and technology education.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="1971" data-label="1971">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">1971</div>
+          <div class="timeline-card">
+            <img class="timeline-img img-1971" src="https://hackaday.com/wp-content/uploads/2018/01/intel_c4004_b.jpg?w=800" alt="Intel 4004 Microprocessor 1971">
+            <div class="card-text">
+              <strong>1971</strong><br>
+              Intel introduces the first microprocessor, the 4004.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="1978" data-label="1978">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">1978</div>
+          <div class="timeline-card">
+            <img class="timeline-img img-1978" src="https://i.extremetech.com/imagery/content-types/01Sv9zAVXuL7BmMnZI3g3CT/hero-image.jpg" alt="Intel 8086 Processor 1978">
+            <div class="card-text">
+              <strong>1978</strong><br>
+              Introduction of the 8086 processor, leading the way for personal computing.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="1985" data-label="1985">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">1985</div>
+          <div class="timeline-card">
+            <img class="timeline-img img-1985" src="https://cdn.cpu-world.com/CPUs/80386/L_Intel-NG80386SX-25%20(SAMPLE).jpg" alt="Intel 80386 Processor 1985">
+            <div class="card-text">
+              <strong>1985</strong><br>
+              Intel launches the 80386 processor, delivering improved energy efficiency.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="2006" data-label="2006">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">2006</div>
+          <div class="timeline-card">
+            <img class="timeline-img" src="https://mms.businesswire.com/media/20240124070327/en/2007663/4/Intel-New-Mexico-Fabs-1.jpg" alt="Intel Fabs 2006">
+            <div class="card-text">
+              <strong>2006</strong><br>
+              Intel's greenhouse gas emissions reached their peak in 2006.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="2020" data-label="2020">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">2020</div>
+          <div class="timeline-card">
+            <img class="timeline-img" src="https://d1io3yog0oux5.cloudfront.net/_d695306582e6f1104214b69298ca5ad9/intel/news/155/1497/image.jpeg" alt="Intel Sustainability 2020">
+            <div class="card-text">
+              <strong>2020</strong><br>
+              Intel achieves 100% renewable energy usage in U.S. operations.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="2022" data-label="2022">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">2022</div>
+          <div class="timeline-card">
+            <img class="timeline-img long-img" src="https://tse3.mm.bing.net/th/id/OIP.4fhGa4057rk5u4ElYKciFAHaE7?pid=Api&P=0&h=220" alt="Intel Sustainability 2022">
+            <div class="card-text">
+              <strong>2022</strong><br>
+              Intel employees celebrate Earth Day, supporting global sustainability efforts.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-event-vertical" tabindex="0" aria-label="2023" data-label="2023">
+        <div class="timeline-dot-vertical"></div>
+        <div style="flex: 1;">
+          <div class="timeline-date-vertical">2023</div>
+          <div class="timeline-card">
+            <img class="timeline-img" style="object-fit:cover;" src="https://tse3.mm.bing.net/th/id/OIP.0lb-4bSPZbaAuxvoEjeu9wHaEK?pid=Api&P=0&h=220" alt="Intel Sustainability 2023">
+            <div class="card-text">
+              <strong>2023</strong><br>
+              Intel's Fab 34 plant achieves less than 1% waste, with robust recycling and diversion efforts.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <p>&copy; 2025 Intel Corporation | Eco-Tech Vision</p>
+  </footer>
 </body>
 </html>
