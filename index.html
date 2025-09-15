@@ -5,58 +5,332 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Intel Timeline</title>
   <style>
-    body{font-family:Arial, sans-serif;margin:0;background:#0f1724;color:#fff}
-    .wrap{max-width:1000px;margin:0 auto;padding:20px}
-    h1{margin-bottom:10px}
-    .timeline{position:relative;padding:40px 0}
-    .axis{position:relative;height:6px;background:#333;border-radius:3px;margin:40px 0}
-    .node{position:absolute;top:-10px;transform:translateX(-50%);width:20px;height:20px;background:#6cc4ff;border-radius:50%;cursor:pointer;border:2px solid #fff}
-    .card{margin:20px 0;padding:15px;background:#1a2537;border-radius:10px;display:flex;align-items:center;gap:15px}
-    .card img{width:160px;border-radius:8px}
-    .card h3{margin:0 0 10px 0}
-    .card p{margin:0;color:#bbb}
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f8fafc;
+      color: #222;
+    }
+    .wrap {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+    .intel-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .intel-header img {
+      height: 44px;
+    }
+    h1 {
+      margin-bottom: 5px;
+      text-align: center;
+      color: #222;
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+    .timeline-horizontal {
+      position: relative;
+      margin: 30px auto;
+      height: 440px;
+      background: transparent;
+      max-width: 1000px; /* Wider timeline for computers */
+      width: 100%;
+    }
+    .timeline-axis {
+      position: absolute;
+      top: 180px;
+      left: 5vw;
+      right: 5vw;
+      height: 8px;
+      background: linear-gradient(90deg, #f87171 0%, #fbbf24 25%, #34d399 45%, #38bdf8 75%, #a78bfa 100%);
+      border-radius: 4px;
+      z-index: 0;
+      box-shadow: 0 2px 10px #0002;
+    }
+    /* Timeline node: small circle for beginners */
+    .timeline-node {
+      position: absolute;
+      top: 155px;
+      left: 0;
+      width: 32px; /* Small circle */
+      height: 32px;
+      border-radius: 50%; /* Makes it a circle */
+      border: 2px solid #fff;
+      box-shadow: 0 2px 10px 0 rgba(56,189,248,0.13);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      z-index: 2;
+      background: #6cc4ff;
+      padding: 0;
+      transition: width 0.4s, height 0.4s, box-shadow 0.4s, border-color 0.4s; /* Smooth grow effect */
+    }
+    /* Make each node a different color for fun */
+    .timeline-node[data-index="0"] { left: 5%; background: #f87171; }
+    .timeline-node[data-index="1"] { left: 28%; background: #fbbf24; }
+    .timeline-node[data-index="2"] { left: 51%; background: #34d399; }
+    .timeline-node[data-index="3"] { left: 74%; background: #38bdf8; }
+    /* Grow the circle gradually on hover/focus */
+    .timeline-node:hover, .timeline-node:focus {
+      width: 52px;
+      height: 52px;
+      box-shadow: 0 0 0 10px #38bdf880;
+      border-color: #38bdf8;
+      z-index: 3;
+    }
+    .timeline-node.active {
+      width: 52px;
+      height: 52px;
+      box-shadow: 0 0 0 14px #6cc4ff50;
+      border-color: #6cc4ff;
+      z-index: 3;
+    }
+    /* Hide the image inside the circle for now, just show the circle */
+    .timeline-node img {
+      display: none;
+    }
+    .timeline-node-year {
+      font-weight: 600;
+      font-size: 14px;
+      color: #fff;
+      background: rgba(0,0,0,0.10);
+      border-radius: 7px;
+      padding: 1px 6px;
+      margin-top: 4px;
+      margin-bottom: 0;
+      border: none;
+      box-shadow: none;
+      display: block;
+    }
+    /* Timeline card styles for desktop and large screens */
+    .timeline-card {
+      position: absolute;
+      width: 180px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px 0 #0ea5e944;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 10px 8px 10px;
+      z-index: 5;
+      opacity: 0; /* Hide cards by default */
+      pointer-events: none;
+      transition: opacity .25s;
+      font-size: 14px;
+      left: unset;
+      transform: unset;
+      max-width: unset;
+      word-break: normal;
+    }
+    .timeline-card.visible {
+      opacity: 1; /* Show card when active */
+      pointer-events: auto;
+    }
+    .timeline-card img {
+      width: 80px;
+      margin-bottom: 8px;
+    }
+    .timeline-card h3 {
+      font-size: 1rem;
+    }
+    .timeline-card p {
+      font-size: 14px;
+    }
+    /* Mobile first: stack timeline vertically for small screens */
+    @media (max-width: 650px) {
+      /* Make the timeline axis vertical */
+      .timeline-horizontal {
+        height: 700px; /* Set enough height for vertical timeline */
+        max-width: 98vw;
+        margin: 10px auto;
+        position: relative;
+      }
+      .timeline-axis {
+        top: 60px;
+        left: 50%; /* Center the axis */
+        transform: translateX(-50%);
+        width: 10px;
+        height: 550px;
+        right: auto;
+        background: linear-gradient(180deg, #f87171 0%, #fbbf24 25%, #34d399 45%, #38bdf8 75%, #a78bfa 100%);
+        border-radius: 7px;
+      }
+      /* Alternate nodes left and right of the axis */
+      .timeline-node {
+        width: 38px;
+        height: 38px;
+      }
+      .timeline-node[data-index="0"] { left: calc(50% - 55px); top: 70px; } /* Left side */
+      .timeline-node[data-index="1"] { left: calc(50% + 17px); top: 200px; } /* Right side */
+      .timeline-node[data-index="2"] { left: calc(50% - 55px); top: 340px; } /* Left side */
+      .timeline-node[data-index="3"] { left: calc(50% + 17px); top: 480px; } /* Right side */
+      /* Mobile-only notecard styles with custom widths for each plot point */
+      .timeline-card {
+        padding: 6px 2px 6px 2px;
+        font-size: 11px;
+        word-break: break-word;
+        position: absolute;
+        left: unset;
+        right: unset;
+        transform: unset;
+      }
+      /* 1968: wider and shorter card, can cross boundary but not cover other points */
+      .timeline-card[data-index="0"] {
+        left: 0;
+        top: 40px;
+        width: 180px;
+        max-width: 180px;
+        padding: 2px 2px 2px 2px;
+        font-size: 9px;
+      }
+      /* 1971: wider and shorter card, can cross boundary but not cover other points */
+      .timeline-card[data-index="1"] {
+        right: 0;
+        left: auto;
+        top: 170px;
+        width: 180px;
+        max-width: 180px;
+        padding: 2px 2px 2px 2px;
+        font-size: 9px;
+      }
+      /* 1978: more space, medium card */
+      .timeline-card[data-index="2"] {
+        left: 0;
+        top: 310px;
+        width: 180px;
+        max-width: 180px;
+        padding: 6px 2px 6px 2px;
+        font-size: 11px;
+      }
+      /* 1985: most space, widest card */
+      .timeline-card[data-index="3"] {
+        right: 0;
+        left: auto;
+        top: 450px;
+        width: 220px;
+        max-width: 220px;
+        padding: 6px 2px 6px 2px;
+        font-size: 11px;
+      }
+      .timeline-card img {
+        width: 40px;
+        margin-bottom: 4px;
+      }
+      .timeline-card h3 {
+        font-size: 0.95rem;
+      }
+      .timeline-card p {
+        font-size: 11px;
+      }
+      h1 { font-size: 1.05rem; }
+    }
+    /* ...existing code... */
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Intel Timeline</h1>
-    <p>Explore Intel’s key milestones from its founding through major chip innovations.</p>
-
-    <div class="timeline">
-      <div class="axis"></div>
-
-      <div class="card">
-        <img src="/mnt/data/995cae57-0dd8-4143-97aa-a8edb2421ace.png" alt="Intel founding 1968">
-        <div>
-          <h3>1968 — Intel Founded</h3>
-          <p>Intel was founded in 1968, marking the beginning of the modern semiconductor industry.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="/mnt/data/c7969f43-db91-452c-82f4-499dfededb90.png" alt="Early Microprocessor">
-        <div>
-          <h3>1971 — First Microprocessor</h3>
-          <p>Intel introduced the world’s first commercial microprocessor, revolutionizing computing.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="/mnt/data/8e74a524-8540-4385-8b33-cd6e52bd68d7.png" alt="Intel 8086">
-        <div>
-          <h3>1978 — Intel 8086</h3>
-          <p>The Intel 8086 microprocessor launched, laying the foundation for the x86 architecture.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="/mnt/data/44b92773-5dbc-470f-ba66-a59c6b0bba1b.png" alt="Intel 1985 Processor">
-        <div>
-          <h3>1985 — Intel Innovation</h3>
-          <p>Intel continued to push forward with powerful processors, shaping the future of PCs.</p>
-        </div>
-      </div>
+    <div class="intel-header">
+      <!-- Heading photo for the timeline -->
+      <img src="images/intel-header-logo.svg" alt="Timeline Heading Photo" style="height: 60px; border-radius: 10px; box-shadow: 0 2px 8px #0002;">
     </div>
+    <h1>Intel Timeline</h1>
+    <!-- Timeline container with reduced width for desktop -->
+    <section class="timeline-horizontal" aria-label="Intel timeline" style="max-width:800px; margin:30px auto;">
+      <!-- Use an ordered list for semantic timeline structure -->
+      <ol class="timeline-axis" role="list" aria-label="Intel historical milestones">
+        <!-- Timeline nodes: Only 4 photos -->
+        <!-- Photo 1: Intel founding 1968 -->
+        <li>
+          <button class="timeline-node" data-index="0" aria-label="Photo 1" tabindex="0">
+            <span class="timeline-node-year">1968</span>
+          </button>
+        </li>
+        <!-- Photo 2: Early microprocessor -->
+        <li>
+          <button class="timeline-node" data-index="1" aria-label="Photo 2" tabindex="0">
+            <span class="timeline-node-year">1971</span>
+          </button>
+        </li>
+        <!-- Photo 3: Intel 8086 -->
+        <li>
+          <button class="timeline-node" data-index="2" aria-label="Photo 3" tabindex="0">
+            <span class="timeline-node-year">1978</span>
+          </button>
+        </li>
+        <!-- Photo 4: Intel 1985 processor -->
+        <li>
+          <button class="timeline-node" data-index="3" aria-label="Photo 4" tabindex="0">
+            <span class="timeline-node-year">1985</span>
+          </button>
+        </li>
+      </ol>
+      <!-- Timeline cards for each photo -->
+      <div class="timeline-card" data-index="0" id="card-0">
+        <img src="images/4.jpg" alt="Intel founding 1968">
+        <h3>1968 — Intel Founded</h3>
+        <p>Intel was founded in 1968, marking the beginning of the modern semiconductor industry.</p>
+      </div>
+      <div class="timeline-card" data-index="1" id="card-1">
+        <img src="images/3.jpg" alt="Early Microprocessor">
+        <h3>1971 — First Microprocessor</h3>
+        <p>Intel introduced the world’s first commercial microprocessor, revolutionizing computing.</p>
+      </div>
+      <div class="timeline-card" data-index="2" id="card-2">
+        <img src="images/2.jpg" alt="Intel 8086">
+        <h3>1978 — Intel 8086</h3>
+        <p>The Intel 8086 microprocessor launched, laying the foundation for the x86 architecture.</p>
+      </div>
+      <div class="timeline-card" data-index="3" id="card-3">
+        <img src="images/1.jpg" alt="Intel 1985 Processor">
+        <h3>1985 — Intel Innovation</h3>
+        <p>Intel continued to push forward with powerful processors, shaping the future of PCs.</p>
+      </div>
+    </section>
   </div>
+  <script>
+    // Beginner-friendly script to show notecard when hovering over a node
+    const nodes = document.querySelectorAll('.timeline-node');
+    const cards = document.querySelectorAll('.timeline-card');
+
+    function showCard(index) {
+      cards.forEach((card, i) => {
+        if (i === index) {
+          card.classList.add('visible');
+          nodes[i].classList.add('active');
+        } else {
+          card.classList.remove('visible');
+          nodes[i].classList.remove('active');
+        }
+      });
+    }
+
+    // Show card on hover/focus/click/touch
+    nodes.forEach((node, i) => {
+      node.addEventListener('mouseenter', () => showCard(i));
+      node.addEventListener('focus', () => showCard(i));
+      node.addEventListener('click', () => showCard(i));
+      node.addEventListener('touchstart', () => showCard(i));
+      node.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showCard(i);
+        }
+      });
+    });
+
+    // Hide card when mouse leaves timeline area (for desktop)
+    document.querySelector('.timeline-horizontal').addEventListener('mouseleave', () => {
+      cards.forEach(card => card.classList.remove('visible'));
+      nodes.forEach(node => node.classList.remove('active'));
+    });
+  </script>
 </body>
 </html>
