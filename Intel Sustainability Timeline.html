@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <!-- Required meta tags for Bootstrap RTL -->
@@ -499,6 +499,30 @@
       margin-top: 0;
       border-top: 2px solid #0071C5;
     }
+
+    /* RTL overrides for horizontal timeline */
+    html[dir="rtl"] .timeline-horizontal {
+      flex-direction: row-reverse !important; /* Flip timeline direction */
+    }
+    html[dir="rtl"] .timeline-bar {
+      left: unset !important;
+      right: 80px !important; /* Flip bar position */
+      background: linear-gradient(90deg, #4CAF50, #0071C5); /* Flip gradient direction */
+    }
+    /* Flip event positions for RTL */
+    html[dir="rtl"] .timeline-event-horizontal[data-index="0"] { right: 80px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="1"] { right: 180px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="2"] { right: 300px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="3"] { right: 420px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="4"] { right: 540px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="5"] { right: 660px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="6"] { right: 780px !important; left: unset !important; }
+    html[dir="rtl"] .timeline-event-horizontal[data-index="7"] { right: 970px !important; left: unset !important; }
+    /* Flip card alignment for RTL */
+    html[dir="rtl"] .timeline-card {
+      flex-direction: row-reverse !important;
+      text-align: right !important;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -849,4 +873,3 @@
     html[dir="rtl"] textarea { text-align: right; }
 </body>
 </html>
-
