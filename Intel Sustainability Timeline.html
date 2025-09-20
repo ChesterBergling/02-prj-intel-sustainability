@@ -888,6 +888,37 @@
     html[dir="rtl"] .form-control,
     html[dir="rtl"] input,
     html[dir="rtl"] textarea { text-align: right; }
+  </style>
+  <script>
+  // This code checks if the page language is a right-to-left language and sets RTL mode.
+  // It works with Google Translate because Google changes the <html lang="..."> attribute.
+  function updateRTL() {
+    // List of RTL language codes
+    var rtlLangs = ['ar', 'he', 'fa', 'ur'];
+    var html = document.documentElement;
+    var lang = html.getAttribute('lang');
+    if (rtlLangs.includes(lang)) {
+      html.setAttribute('dir', 'rtl');
+    } else {
+      html.setAttribute('dir', 'ltr');
+    }
+  }
+
+  // Run on page load
+  updateRTL();
+
+  // Observe changes to the <html> lang attribute (Google Translate changes this)
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName === 'lang') {
+        updateRTL();
+      }
+    });
+  });
+  observer.observe(document.documentElement, { attributes: true });
+
+  // Optionally, check every second in case Google Translate changes it in a way MutationObserver misses
+  setInterval(updateRTL, 1000);
+</script>
 </body>
 </html>
-
