@@ -523,6 +523,23 @@
       flex-direction: row-reverse !important;
       text-align: right !important;
     }
+
+    /* Center the timeline title */
+    .timeline-title {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      /* Already has center styles, but this ensures centering for beginners */
+    }
+
+    /* Center the timeline for both horizontal and vertical layouts */
+    .timeline-horizontal,
+    .timeline-vertical {
+      justify-content: center; /* Center items horizontally */
+      align-items: center;     /* Center items vertically */
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -873,3 +890,4 @@
     html[dir="rtl"] textarea { text-align: right; }
 </body>
 </html>
+
