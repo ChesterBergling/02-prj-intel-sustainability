@@ -1,1 +1,578 @@
-/* Add your CSS here */
+/* General styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #222;
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+
+/* Ensure 100% scroll using viewport height */
+html, body {
+  height: 150vh; /* Increase vertical scroll to 150% of the viewport height */
+  overflow-y: auto; /* Ensure vertical scrolling is enabled */
+}
+
+/* Ensure the footer is always visible at the bottom */
+html, body {
+  min-height: 100vh; /* Ensure the page takes up at least the full viewport height */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+
+/* Center header, hero section, nav bar, paragraphs, div.content, and footer */
+header, .hero, nav, p, .content, footer {
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-align: center; /* Ensure text is centered */
+  flex-direction: column; /* Stack content vertically */
+  height: 100%; /* Ensure elements take up full height */
+}
+
+footer {
+  margin-top: auto; /* Push the footer to the bottom of the page */
+}
+
+/* Header styles */
+header {
+  background: #0071C5;
+  color: #fff;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  justify-content: center; /* Center the navigation buttons */
+  gap: 1rem; /* Add spacing between buttons */
+}
+
+nav a {
+  display: inline-block;
+  padding: 0.5rem 1rem; /* Add padding for button-like appearance */
+  background-color: #0071C5; /* Blue background for buttons */
+  color: #fff; /* White text color */
+  text-decoration: none; /* Remove underline */
+  border-radius: 4px; /* Add rounded corners */
+  transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+nav a:hover {
+  background-color: #004e91; /* Darken the button on hover */
+}
+
+/* Hero section */
+.hero {
+  background: linear-gradient(135deg, #0071C5 50%, #4CAF50 50%);
+  color: #fff;
+  text-align: center;
+  padding: 0 2rem; /* Add horizontal padding for spacing */
+  display: flex; /* Use flexbox for centering */
+  flex-direction: column; /* Stack content vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  height: calc(100vh - 4rem); /* Adjust height to fill the screen minus the header height */
+}
+
+.hero h2 {
+  font-size: 1.5rem; /* Adjust heading size */
+  margin-bottom: 0.5rem; /* Add spacing below the heading */
+  text-align: center; /* Ensure the heading is centered */
+}
+
+.hero p {
+  font-size: 1rem; /* Adjust paragraph size */
+  margin-bottom: 2rem; /* Add spacing below the paragraph to separate it from the content section */
+  text-align: center; /* Ensure the paragraph is centered */
+}
+
+/* Content section */
+.content {
+  flex-direction: column;
+  justify-content: center; /* Center the buttons horizontally */
+  gap: 1rem; /* Add spacing between buttons */
+  margin-bottom: 3rem; /* Add 3rem margin below div.content */
+  margin-top: 3rem; /* Add 3rem margin above div.content */
+}
+
+.show-card-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem; /* Add padding for button-like appearance */
+  color: #fff; /* White text color */
+  text-decoration: none; /* Remove underline */
+  border-radius: 4px; /* Add rounded corners */
+  font-weight: 500; /* Match the font weight with the nav bar */
+  transition: background-color 0.2s; /* Smooth hover effect */
+  background-color: #0071C5; /* Default background color */
+}
+
+.show-card-btn:hover {
+  background-color: #004e91; /* Darken the button on hover */
+}
+
+.show-card-btn:active {
+  background-color: #003b6b; /* Darken further on click */
+}
+
+/* Timeline section */
+.timeline-section {
+  padding: 3rem 2rem;
+  background: #F5F5F5;
+}
+
+.timeline-title {
+  color: #0071C5;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 3rem; /* Add extra spacing between the title and the timeline */
+}
+
+.timeline-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-dot-vertical {
+  width: 24px;
+  height: 24px;
+  background: #4CAF50;
+  border: 3px solid #0071C5;
+  border-radius: 50%;
+  margin: 0.6rem 0;
+}
+
+.timeline-card {
+  display: none;
+  background: #fff;
+  border: 2px solid #F5F5F5;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-card img {
+  max-width: 100%; /* Ensure the image width does not exceed the card width */
+  max-height: 100%; /* Ensure the image height does not exceed the card height */
+  object-fit: cover; /* Maintain aspect ratio and cover the available space */
+}
+
+.timeline-event-vertical.active .timeline-card {
+  display: block;
+}
+
+/* Horizontal timeline section */
+.timeline-horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Spread nodes evenly */
+  position: relative;
+  margin: 2rem 0;
+  padding: 1rem 0;
+  overflow: visible !important; /* Ensure content outside the bounds is visible */
+  width: 100%; /* Ensure the timeline takes up the full width */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
+
+.timeline-bar {
+  position: absolute;
+  top: 0; /* Place the timeline bar at the top */
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #0071C5;
+  z-index: 1; /* Ensure the timeline bar stays behind nodes */
+}
+
+.timeline-event-horizontal {
+  position: absolute; /* Ensure nodes are absolutely positioned relative to the parent */
+  top: 0; /* Fix nodes directly on the timeline */
+  transform: translateY(-50%); /* Center nodes vertically on the timeline */
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3; /* Ensure nodes stay above the timeline and other elements */
+  margin: 0; /* Remove any margin adjustments */
+  transition: none !important; /* Disable all transitions to prevent movement */
+  margin-bottom: 3rem; /* Maintain 3rem spacing between nodes */
+}
+
+.timeline-event-horizontal:hover,
+.timeline-event-horizontal.active,
+.timeline-event-horizontal.clicked {
+  /* Ensure nodes remain fixed in all states */
+  position: absolute;
+  top: 0; /* Keep nodes fixed directly on the timeline */
+  transform: translateY(-50%);
+  margin: 0 !important; /* Override any margin changes */
+  transition: none !important; /* Disable transitions in all states */
+  margin-bottom: 3rem !important; /* Ensure 3rem spacing is enforced in all states */
+}
+
+.timeline-card {
+  display: none;
+  position: absolute; /* Ensure cards are positioned relative to the parent */
+  top: 50px; /* Place cards below the node */
+  left: 50%; /* Center cards horizontally relative to the node */
+  transform: translateX(-50%); /* Adjust horizontal centering */
+  background: #fff;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  z-index: 1; /* Ensure cards appear below nodes */
+}
+
+.timeline-event-horizontal:hover .timeline-card,
+.timeline-event-horizontal.active .timeline-card {
+  display: block; /* Show the card when the node is hovered or active */
+}
+
+.timeline-dot-horizontal {
+  width: 24px;
+  height: 24px;
+  background: #4CAF50; /* Green background for the circular node */
+  border: 3px solid #0071C5; /* Blue border to match the timeline */
+  border-radius: 50%; /* Make the node circular */
+  margin: 0 auto; /* Center the node horizontally */
+  transition: transform 0.2s; /* Add a smooth scaling effect on hover */
+}
+
+.timeline-dot-horizontal:hover {
+  transform: scale(1.2); /* Enlarge the node slightly on hover */
+}
+
+/* Prevent movement of nodes and timeline on click */
+.timeline-horizontal .timeline-event-horizontal {
+  position: relative;
+  transition: none; /* Disable transitions to prevent movement */
+}
+
+.timeline-horizontal .timeline-bar {
+  position: absolute;
+  transition: none; /* Disable transitions to prevent movement */
+}
+
+/* Responsive styles for vertical timeline */
+@media (max-width: 1024px) {
+  .timeline-horizontal {
+    flex-direction: column; /* Stack nodes vertically */
+    align-items: flex-start; /* Align nodes to the left */
+  }
+
+  .timeline-bar {
+    position: absolute;
+    top: 0;
+    left: 0; /* Keep the timeline bar on the left */
+    width: 6px; /* Maintain the width of the timeline bar */
+    height: 100%; /* Ensure the timeline bar spans the full height */
+  }
+
+  .timeline-dot-horizontal {
+    width: 24px; /* Keep the size of the circular nodes */
+    height: 24px;
+    margin-right: 1rem; /* Add spacing between the bar and nodes */
+  }
+
+  .timeline-event-horizontal {
+    position: relative; /* Ensure nodes remain constant */
+    top: 0 !important; /* Fix nodes directly on the timeline */
+    transform: translateY(-50%) !important; /* Center nodes vertically */
+    margin-bottom: 3rem; /* Maintain 3rem spacing between nodes */
+    transition: none !important; /* Disable transitions to prevent movement */
+  }
+
+  .timeline-card {
+    position: absolute; /* Ensure cards are positioned relative to the parent */
+    left: calc(100% + 1rem); /* Position cards to the right of the corresponding node */
+    top: 50%; /* Align cards vertically with the node */
+    transform: translateY(-50%); /* Center cards vertically */
+    margin: 0; /* Remove any additional margins */
+  }
+
+  /* Align hero heading and paragraph to the left */
+  .hero h2, .hero p {
+    text-align: left; /* Align text to the left */
+    padding-left: 1rem; /* Add padding to match the nav bar */
+  }
+
+  /* Align content section and buttons to the left */
+  .content {
+    text-align: left; /* Align text to the left */
+    padding-left: 1rem; /* Add padding to match the nav bar and headings */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    gap: 1rem; /* Add spacing between buttons */
+  }
+
+  .show-card-btn {
+    align-self: flex-start; /* Align buttons to the left */
+  }
+
+  /* Align subscription form to the left */
+  .subscribe-section {
+    text-align: left; /* Align text to the left */
+    padding-left: 1rem; /* Add padding to match the nav bar and headings */
+  }
+
+  #subscribe-form {
+    display: flex;
+    flex-direction: column; /* Stack form elements vertically */
+    gap: 1rem; /* Add spacing between form elements */
+  }
+
+  #subscribe-form input,
+  #subscribe-button {
+    align-self: flex-start; /* Align inputs and button to the left */
+  }
+
+  html, body {
+    /* Ensure the vertical scroll lasts through 150% of the viewport height on non-desktop devices */
+    height: 100;
+  }
+}
+
+/* Additional responsive styles for Nest Hub and Nest Hub Max */
+@media (max-width: 1280px) {
+  /* Apply vertical timeline styles for Nest Hub and Nest Hub Max */
+  .timeline-horizontal {
+    flex-direction: column; /* Stack nodes vertically */
+    align-items: flex-start; /* Align nodes to the left */
+  }
+
+  .timeline-bar {
+    position: absolute;
+    top: 0;
+    left: 0; /* Keep the timeline bar on the left */
+    width: 6px; /* Maintain the width of the timeline bar */
+    height: 100%; /* Ensure the timeline bar spans the full height */
+  }
+
+  .timeline-dot-horizontal {
+    width: 24px; /* Keep the size of the circular nodes */
+    height: 24px;
+    margin-right: 1rem; /* Add spacing between the bar and nodes */
+  }
+
+  .timeline-event-horizontal {
+    position: relative; /* Ensure nodes remain constant */
+    top: 0 !important; /* Fix nodes directly on the timeline */
+    transform: translateY(-50%) !important; /* Center nodes vertically */
+    margin-bottom: 3rem; /* Maintain 3rem spacing between nodes */
+    transition: none !important; /* Disable transitions to prevent movement */
+  }
+
+  .timeline-card {
+    position: absolute; /* Ensure cards are positioned relative to the parent */
+    left: calc(100% + 1rem); /* Position cards to the right of the corresponding node */
+    top: 50%; /* Align cards vertically with the node */
+    transform: translateY(-50%); /* Center cards vertically */
+    margin: 0; /* Remove any additional margins */
+  }
+
+  /* Adjust hero section for Nest Hub Max */
+  .hero {
+    text-align: left; /* Align text to the left */
+    padding-left: 1rem; /* Add padding to match the nav bar */
+  }
+
+  .hero h2, .hero p {
+    text-align: left; /* Align text to the left */
+    padding-left: 1rem; /* Add padding to match the nav bar */
+  }
+
+  /* Adjust content section for Nest Hub Max */
+  .content {
+    flex-direction: row; /* Stack buttons vertically */
+    align-items: flex-start; /* Align buttons to the left */
+    padding-left: 1rem; /* Add padding to match the nav bar */
+  }
+
+  .show-card-btn {
+    align-self: flex-start; /* Align buttons to the left */
+  }
+}
+
+/* General responsive styles for headings */
+h1, h2, h3 {
+  word-wrap: break-word; /* Ensure long words break to the next line */
+  overflow-wrap: break-word; /* Handle word wrapping for all browsers */
+  text-align: center; /* Center-align headings for better readability */
+}
+
+@media (max-width: 768px) {
+  /* Adjust font sizes for smaller screens */
+  .header-title {
+    font-size: 1.5rem; /* Reduce header font size */
+  }
+
+  .hero h2 {
+    font-size: 1.25rem; /* Reduce hero section heading size */
+  }
+
+  .timeline-title {
+    font-size: 1.5rem; /* Reduce timeline title size */
+  }
+
+  .subscribe-section h2 {
+    font-size: 1.25rem; /* Reduce subscription section heading size */
+  }
+
+  /* Add padding to prevent content from being cut off */
+  body, .hero, .content, .timeline-section, .subscribe-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Adjust headings for iPhones */
+  .header-title, .hero h2, .timeline-title, .subscribe-section h2 {
+    text-align: left; /* Align headings to the left */
+    padding-left: 1rem; /* Add padding to move headings more to the left */
+  }
+
+  /* Ensure the navigation bar remains vertical */
+  nav {
+    display: flex;
+    flex-direction: column; /* Stack navigation links vertically */
+    align-items: flex-start; /* Align links to the left */
+    padding-left: 1rem; /* Add padding for spacing */
+  }
+
+  nav a {
+    margin: 0.5rem 0; /* Add vertical spacing between links */
+  }
+
+  /* Align div.content vertically on iPhones */
+  .content {
+    flex-direction: column; /* Stack content vertically */
+    align-items: center; /* Center content horizontally */
+  }
+}
+
+@media (min-width: 600px) and (min-height: 800px) {
+  .timeline-section {
+    flex-direction: row;
+  }
+}
+footer {
+  background: linear-gradient(135deg, #0071C5 50%, #4CAF50 50%);
+  color: #fff;
+  text-align: center;
+  padding: 2.5rem 2rem; /* Reduce top padding by 10px to move content up */
+}
+
+
+
+/* Subscription section styles */
+.subscribe-section {
+  text-align: center;
+  padding: 1.5rem; /* Reduce padding to move content up */
+}
+
+#subscribe-form {
+  margin-top: 1rem;
+}
+
+#subscribe-form input {
+  width: 80%;
+  max-width: 400px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem; /* Reduce spacing between inputs */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+#subscribe-form input[type="name"] {
+  margin-bottom: 3rem; /* Reduce the bottom margin to move the email input closer to the name input by 50% */
+}
+
+/* Move email label in front of the email input */
+#subscribe-form label[for="email"] {
+  display: inline-block; /* Place label and input on the same line */
+  margin-right: 0.5rem; /* Add spacing between label and input */
+}
+
+#subscribe-form input[type="email"] {
+  display: inline-block; /* Keep input inline with label */
+  vertical-align: middle; /* Align input vertically with the label */
+  margin-bottom: 3rem; /* Add 3rem margin below email */
+  margin-top: 3rem; /* Add spacing above the email input */
+}
+/* Ensure name and email fields are on separate lines and centered */
+#subscribe-form label[for="name"],
+#subscribe-form input[type="text"],
+#subscribe-form label[for="email"],
+#subscribe-form input[type="email"] {
+  display: block; /* Stack each element vertically */
+  margin: 0 auto; /* Center each element horizontally */
+}
+
+/* Ensure the subscribe button is 3rem away from the email input on all devices */
+#subscribe-form input[type="email"] {
+  margin-bottom: 3rem !important; /* Force 3rem margin below email */
+}
+
+#subscribe-button {
+  background-color: #0071C5 !important; /* Intel blue */
+  color: #fff; /* Ensure text is white for contrast */
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 3rem !important; /* Force 3rem margin above subscribe button */
+}
+
+#subscribe-button:hover {
+  background-color: #004e91 !important; /* Darker Intel blue on hover */
+}
+
+#subscribe-button:active {
+  background-color: #003b6b !important; /* Even darker Intel blue on click */
+}
+
+/* Ensure email label and input are on a new line and centered */
+#subscribe-form label[for="email"],
+#subscribe-form input[type="email"] {
+  display: block; /* Move email label and input to a new line */
+  margin: 0 auto; /* Center horizontally */
+}
+
+/* Ensure the timeline is horizontal */
+.timeline {
+  display: flex; /* Arrange timeline items in a horizontal row */
+  flex-direction: row; /* Ensure horizontal layout */
+  overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+/* Center the subscribe button and add a blue background on Nest Hub */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  #subscribe-button {
+    display: block; /* Ensure the button is treated as a block element */
+    margin: 0 auto; /* Center the button horizontally */
+    background-color: blue; /* Add a blue background */
+    color: white; /* Ensure text is visible on blue background */
+  }
+}
+
+/* Shorten the vertical scroll bar by 50% */
+html, body {
+  height: 150vh; /* Increase the height to create more scrollable space */
+}
+
+/* Adjust the scroll bar styling */
+body::-webkit-scrollbar {
+  height: 10%; /* Shorten the scroll bar by 90% */
+}
